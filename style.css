@@ -1,0 +1,23 @@
+header {
+    background-color: #BAD7F2;
+}
+.main_view img {
+    width: 50%;
+}
+.main_view {
+    text-align: center;
+}
+.main_view_1 {
+    text-align: center;
+}
+.required {
+    color: red;
+}
+.error {
+    color: red;
+}
+aside {
+    border: 1px solid #F2E2BA;
+    text-align: center;
+}
+
