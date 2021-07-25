@@ -1,5 +1,17 @@
 <?php
 session_start();
+
+if (!empty($_POST)) {
+    if ($_POST['battle'] === 'retry') {
+        header('Location: game.php?action=retry');
+        exit();
+    }
+    if ($_POST['battle'] === 'finish') {
+        header('Location: finish.php');
+        exit();
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -15,33 +27,36 @@ session_start();
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
             <div class="col-8 main_view_1">
-                <h2>あいこ！もう一回勝負！！</h2>
+                <h3>あいこ！もう一回勝負！！</h3>
                 <img src="images/janken_boys.png" alt="あいこ">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-5 user">
                         <p>あなたの出し手</p>
-                        <img src="images/<?php print($_SESSION['draw']['user_hand']); ?>.png" alt="">
+                        <img src="images/<?php print($_SESSION['user_hand']); ?>.png" alt="">
                     </div>
-                    <div class="col-6">
+                    <div class="col-5 maker">
                         <p>あいての出し手</p>
-                        <img src="images/<?php print($_SESSION['draw']['maker_hand']); ?>.png" alt="">
+                        <img src="images/<?php print($_SESSION['maker_hand']); ?>.png" alt="">
                     </div>
                 </div>
-                <a href="game.php">もう一回！</a>
+                <form class="row g-3" action="" method="post">
+                    <div class="col-auto">
+                        <button type="submit" name="battle" value="retry" class="btn btn-primary mb-3">もう一回勝負！</button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" name="battle" value="finish" class="btn btn-primary mb-3">ゲームを辞める</button>
+                    </div>
+                </form>
             </div>
-            <aside class="col-4">
-                <p><?php print(htmlspecialchars($_SESSION['draw']['name'], ENT_QUOTES)); ?>さん</p>
-                <?php if ($_SESSION['draw']['name'] === 'guest') : ?>
-                    <p><img src="user_image/boy_01.png" alt="guest"></p>
-                <?php else : ?>
-                    <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['draw']['picture'], ENT_QUOTES)); ?>" alt=""></p>
-                <?php endif; ?>
-                <p>コイン所有数：<?php print($_SESSION['draw']['coins']); ?>枚</p>
+            <aside class="col-3">
+                <p><?php print(htmlspecialchars($_SESSION['name'], ENT_QUOTES)); ?>さん</p>
+                <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['picture'], ENT_QUOTES)); ?>" alt=""></p>
+                <p>コイン所有数：<?php print($_SESSION['coins']); ?>枚</p>
             </aside>
         </div>
     </main>

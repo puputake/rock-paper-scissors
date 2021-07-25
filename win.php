@@ -1,13 +1,22 @@
 <?php
 session_start();
 
+$coins = $_SESSION['coins'];
+
+// フォームが送信された場合
 if (!empty($_POST)) {
-    $_SESSION['roulette'] = $_SESSION['win'];
-    $randam = mt_rand(0, 16);
-    $_SESSION['roulette']['coins'] = $_SESSION['win']['coins'] + $randam;
-    $_SESSION['roulette']['randam'] = $randam;
-    header('Location: roulette.php');
-    exit();
+    if ($_POST['battle'] === 'get_coins') {
+        // 獲得するコイン数をランダムで決定する
+        $randam = mt_rand(1, 4);
+        $_SESSION['coins'] = $coins + $randam;
+        $_SESSION['randam'] = $randam;
+        header('Location: roulette.php');
+        exit();
+    }
+    if ($_POST['battle'] === 'finish') {
+        header('Location: finish.php');
+        exit();
+    }
 }
 
 ?>
@@ -27,37 +36,36 @@ if (!empty($_POST)) {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
             <div class="col-8 main_view_1">
-                <h2>おめでとう！あなたの勝ちです！</h2>
+                <h3>おめでとう！あなたの勝ちです！</h3>
                 <img src="images/pose_win_boy.png" alt="勝ち">
                 <div class="row">
-                    <div class="col-6">
-                        <p><?php print(htmlspecialchars($_SESSION['win']['name'])); ?>さんの出し手</p>
-                        <img src="images/<?php print($_SESSION['win']['user_hand']); ?>.png" alt="">
+                    <div class="col-5 user">
+                        <p><?php print(htmlspecialchars($_SESSION['name'])); ?>さんの出し手</p>
+                        <img src="images/<?php print($_SESSION['user_hand']); ?>.png" alt="">
                     </div>
-                    <div class="col-6">
+                    <div class="col-5 maker">
                         <p>あいての出し手</p>
-                        <img src="images/<?php print($_SESSION['win']['maker_hand']); ?>.png" alt="">
+                        <img src="images/<?php print($_SESSION['maker_hand']); ?>.png" alt="">
                     </div>
                 </div>
                 <form class="row g-3" action="" method="post">
                     <div class="col-auto">
-                        <button type="submit" name="get_coins" class="btn btn-primary mb-3">コインを受け取る</button>
+                        <button type="submit" name="battle" value="get_coins" class="btn btn-primary mb-3">コインを受け取る</button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" name="battle" value="finish" class="btn btn-primary mb-3">ゲームを辞める</button>
                     </div>
                 </form>
             </div>
-            <aside class="col-4">
-                <p><?php print(htmlspecialchars($_SESSION['win']['name'], ENT_QUOTES)); ?>さん</p>
-                <?php if ($_SESSION['win']['name'] === 'guest') : ?>
-                    <p><img src="user_image/boy_01.png" alt="guest"></p>
-                <?php else : ?>
-                    <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['win']['picture'], ENT_QUOTES)); ?>" alt=""></p>
-                <?php endif; ?>
-                <p>コイン所有数：<?php print($_SESSION['win']['coins']); ?>枚</p>
+            <aside class="col-3">
+                <p><?php print(htmlspecialchars($_SESSION['name'], ENT_QUOTES)); ?>さん</p>
+                <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['picture'], ENT_QUOTES)); ?>" alt=""></p>
+                <p>コイン所有数：<?php print($coins); ?>枚</p>
             </aside>
         </div>
     </main>

@@ -2,14 +2,17 @@
 session_start();
 require('dbconnect.php');
 
-//　クッキーの設定
+// クッキーに値が保存されている場合
+if ($_COOKIE['email'] !== '') {
+    $email = $_COOKIE['email'];
+}
 
-
-
-//　ログインボタン押下時
+// フォームが送信された場合
 if (!empty($_POST)) {
+    // メールアドレスにクッキー以外の値が入力された場合
     $email = $_POST['email'];
 
+    // 入力欄が空でない場合
     if ($_POST['email'] != '' && $_POST['password'] != '') {
         $login = $db->prepare('SELECT * FROM users WHERE email=? AND password=?');
         $login->execute(array(
@@ -18,15 +21,15 @@ if (!empty($_POST)) {
         ));
         $member = $login->fetch();
 
+        // ログインに成功した場合
         if ($member) {
-            // $_SESSION['game']['id'] = $member['id'];
-            $_SESSION['game'] = $member;
+            $_SESSION['id'] = $member['id'];
             $_SESSION['time'] = time();
 
-            //　チェックボックスチェック時
-
-
-
+            // メールアドレスをクッキーに保存
+            if ($_POST['save'] === 'on') {
+                setcookie('email', $_POST['email'], time() + 60 * 60 * 24 * 14);
+            }
 
             header('Location: game.php');
             exit();
@@ -54,11 +57,11 @@ if (!empty($_POST)) {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
-            <h2>ログインする</h2>
+            <h3>ログインする</h3>
             <p>メールアドレスとパスワードを入力してログインしてください</p>
             <p>ユーザー登録がまだの方はこちらからどうぞ</p>
             <p>&raquo;<a href="join/">入会手続きをする</a></p>
@@ -77,11 +80,11 @@ if (!empty($_POST)) {
                     <label for="exampleFormControlInput1" class="form-label">パスワード</label>
                     <input type="password" name="password" class="form-control" id="exampleFormControlInput1" size="10" maxlength="20" value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>">
                 </div>
-                <!-- <div class="mb-3">
+                <div class="mb-3">
                     <p>ログイン情報の記録</p>
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <input type="checkbox" name="save" class="form-check-input" id="exampleCheck1">
                     <label class="form-check-label" for="exampleCheck1">次回からは自動的にログインする</label>
-                </div> -->
+                </div>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary mb-3">ログインする</button>
                 </div>

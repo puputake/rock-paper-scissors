@@ -12,11 +12,11 @@
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
-            <h2>ユーザー登録完了</h2>
+            <h3>ユーザー登録完了</h3>
             <p>ユーザー登録が完了しました。</p>
             <p>コインは10枚からスタートです。</p>
             <p><a href="../login.php">ログインする</a></p>

@@ -2,7 +2,9 @@
 session_start();
 require('../dbconnect.php');
 
+// フォームが送信された場合
 if (!empty($_POST)) {
+    // エラーチェック
     if ($_POST['name'] === '') {
         $error['name'] = 'blank';
     }
@@ -22,22 +24,34 @@ if (!empty($_POST)) {
             $error['image'] = 'type';
         }
     }
-    //以下アカウント重複チェック必要
 
+    //アカウントの重複をチェック
+    if (empty($error)) {
+        $member = $db->prepare('SELECT COUNT(*) AS cnt FROM users WHERE email=?');
+        $member->execute(array($_POST['email']));
+        $record = $member->fetch();
+        if ($record['cnt'] > 0) {
+            $error['email'] = 'duplicate';
+        }
+    }
+
+    // 画像をmember_pictureフォルダに保存
     if (empty($error)) {
         $image = date('YmdHis') . $_FILES['image']['name'];
-        move_uploaded_file($_FILES['image']['tmp_name'], '../user_image/' . $image);
+        move_uploaded_file($_FILES['image']['tmp_name'], '../member_picture/' . $image);
         $_SESSION['join'] = $_POST;
         $_SESSION['join']['image'] = $image;
         header('Location: check.php');
         exit();
     }
 }
+
+// check.phpで「変更する」を押された場合
 if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
     $_POST = $_SESSION['join'];
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -52,11 +66,11 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
-            <h2>ユーザー登録</h2>
+            <h3>ユーザー登録</h3>
             <p>次の項目に必要事項を入力してください</p>
             <form action="" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
@@ -72,9 +86,9 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
                     <?php if ($error['email'] === 'blank') : ?>
                         <p class="error">※メールアドレスを入力してください</p>
                     <?php endif; ?>
-
-                    <!-- 重複登録メッセージ -->
-
+                    <?php if ($error['email'] === 'duplicate') : ?>
+                        <p class="error">*指定されたメールアドレスは既に登録されています</p>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">パスワード<span class="required"> ※ 必須（４文字以上）</span></label>
@@ -97,7 +111,7 @@ if ($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])) {
                     <?php endif; ?>
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary mb-3" >入力内容を確認する</button>
+                    <button type="submit" class="btn btn-primary mb-3">入力内容を確認する</button>
                 </div>
             </form>
         </div>

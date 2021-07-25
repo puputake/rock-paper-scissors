@@ -2,17 +2,13 @@
 session_start();
 require('dbconnect.php');
 
-// ユーザー登録済の人
-
-
 // 登録する場合
-$coins = $_SESSION['finish']['coins'];
-$id = $_SESSION['finish']['id'];
+$coins = $_SESSION['coins'];
+$id = $_SESSION['id'];
 
 if ($_POST['Registration'] === 'ok') {
     $upd = $db->prepare('UPDATE users SET coins=? WHERE id=?');
     $upd->execute(array($coins, $id));
-    $_SESSION['ranking'] = $_SESSION['finish'];
     header('Location: ranking.php');
     exit();
 }
@@ -37,18 +33,18 @@ if ($_POST['Registration'] === 'ng') {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
             <div class="col-8 main_view_1">
-                <h2>お疲れ様でした</h2>
-                <p><?php print(htmlspecialchars($_SESSION['finish']['name'])); ?>さんの持っているコイン枚数：<?php print($_SESSION['finish']['coins']); ?></p>
+                <h3>お疲れ様でした</h3>
+                <p><?php print(htmlspecialchars($_SESSION['name'])); ?>さんの持っているコイン枚数：<?php print($coins); ?></p>
                 <p>コインを預ければ、次回も同じコインが使えます。（guestは預けられません）</p>
                 <div class="main_view row">
                     <form action="" method="post" enctype="multipart/form-data">
                         <div class="col-auto">
-                            <?php if ($_SESSION['finish']['name'] != 'guest') : ?>
+                            <?php if ($_SESSION['name'] != 'guest') : ?>
                                 <button type="submit" name="Registration" value="ok" class="btn btn-primary mb-3">預ける</button>
                             <?php endif; ?>
                             <button type="submit" name="Registration" value="ng" class="btn btn-primary mb-3">預けない</button>
@@ -56,14 +52,10 @@ if ($_POST['Registration'] === 'ng') {
                     </form>
                 </div>
             </div>
-            <aside class="col-4">
-                <p><?php print(htmlspecialchars($_SESSION['finish']['name'], ENT_QUOTES)); ?>さん</p>
-                <?php if ($_SESSION['finish']['name'] === 'guest') : ?>
-                    <p><img src="user_image/boy_01.png" alt="guest"></p>
-                <?php else : ?>
-                    <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['finish']['picture'], ENT_QUOTES)); ?>" alt=""></p>
-                <?php endif; ?>
-                <p>コイン所有数：<?php print($_SESSION['finish']['coins']); ?>枚</p>
+            <aside class="col-3">
+                <p><?php print(htmlspecialchars($_SESSION['name'], ENT_QUOTES)); ?>さん</p>
+                <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['picture'], ENT_QUOTES)); ?>" alt=""></p>
+                <p>コイン所有数：<?php print($_SESSION['coins']); ?>枚</p>
             </aside>
     </main>
     <footer>

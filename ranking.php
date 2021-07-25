@@ -4,12 +4,12 @@ require('dbconnect.php');
 
 $ranks = $db->query('SELECT * FROM users ORDER BY coins DESC LIMIT 0,5');
 
-
-
-if (!empty($_POST)) {
-    $_SESSION = array();
-    session_destroy();
+if (($_POST['finish']) == 'top') {
     header('Location: index.php');
+    exit();
+}
+if (($_POST['finish']) == 'out') {
+    header('Location: logout.php');
     exit();
 }
 
@@ -28,16 +28,15 @@ if (!empty($_POST)) {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <h1>ランキング</h1>
         <table class="table">
             <thead>
                 <tr>
-                    <!-- <th scope="col">rank</th> -->
                     <th scope="col">user</th>
-                    <th scope="col">    </th>
+                    <th scope="col"> </th>
                     <th scope="col">coins</th>
                     <th scope="col">latest_play</th>
                 </tr>
@@ -45,7 +44,6 @@ if (!empty($_POST)) {
             <tbody>
                 <?php foreach ($ranks as $rank) : ?>
                     <tr>
-                        <!-- <th scope="row">1</th> -->
                         <td><?php print(htmlspecialchars($rank['name'])); ?></td>
                         <td><img src="user_image/<?php print(htmlspecialchars($rank['picture'])); ?>" alt=""></td>
                         <td><?php print(htmlspecialchars($rank['coins'])); ?></td>
@@ -54,12 +52,14 @@ if (!empty($_POST)) {
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <form action="" method="post" enctype="multipart/form-data">
+        <form class="row" action="" method="post" enctype="multipart/form-data">
             <div class="col-auto">
-                <button type="submit" name="Registration" value="ok" class="btn btn-primary mb-3">トップに戻る</button>
+                <button type="submit" name="finish" value="top" class="btn btn-primary mb-3">トップに戻る</button>
+            </div>
+            <div class="col-auto">
+                <button type="submit" name="finish" value="out" class="btn btn-primary mb-3">ログアウト</button>
             </div>
         </form>
-        <!-- <a href="index.php">トップに戻る</a> -->
     </main>
     <footer>
     </footer>

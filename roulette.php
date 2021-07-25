@@ -3,12 +3,10 @@ session_start();
 
 if (!empty($_POST)) {
     if ($_POST['battle'] === 'retry') {
-        $_SESSION['game'] = $_SESSION['roulette'];
-        header('Location: game.php');
+        header('Location: game.php?action=retry');
         exit();
     }
     if ($_POST['battle'] === 'finish') {
-        $_SESSION['finish'] = $_SESSION['roulette'];
         header('Location: finish.php');
         exit();
     }
@@ -29,12 +27,12 @@ if (!empty($_POST)) {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
             <div class="col-8 main_view_1">
-                <h2>おめでとうございます！<?php print($_SESSION['roulette']['randam']); ?>枚のコインがもらえます！</h2>
+                <h3>おめでとうございます！<span class="required"><?php print($_SESSION['randam']); ?></span>枚のコインがもらえます！</h3>
                 <img src="images/game_coin.png" alt="コイン獲得">
                 <form class="row g-3" action="" method="post">
                     <div class="col-auto">
@@ -45,14 +43,10 @@ if (!empty($_POST)) {
                     </div>
                 </form>
             </div>
-            <aside class="col-4">
-                <p><?php print(htmlspecialchars($_SESSION['roulette']['name'], ENT_QUOTES)); ?>さん</p>
-                <?php if ($_SESSION['roulette']['name'] === 'guest') : ?>
-                    <p><img src="user_image/boy_01.png" alt="guest"></p>
-                <?php else : ?>
-                    <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['roulette']['image'], ENT_QUOTES)); ?>" alt=""></p>
-                <?php endif; ?>
-                <p>コイン所有数：<?php print($_SESSION['roulette']['coins']); ?>枚</p>
+            <aside class="col-3">
+                <p><?php print(htmlspecialchars($_SESSION['name'], ENT_QUOTES)); ?>さん</p>
+                    <p><img src="user_image/<?php print(htmlspecialchars($_SESSION['picture'], ENT_QUOTES)); ?>" alt=""></p>
+                <p>コイン所有数：<?php print($_SESSION['coins']); ?>枚</p>
             </aside>
         </div>
     </main>

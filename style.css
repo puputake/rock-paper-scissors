@@ -1,23 +1,96 @@
+body {
+    margin: 10px 0;
+}
+
 header {
-    background-color: #BAD7F2;
+    margin: 15px 0;
 }
-.main_view img {
-    width: 50%;
+
+.row {
+    padding: 0 3%;
 }
-.main_view {
-    text-align: center;
-}
-.main_view_1 {
-    text-align: center;
-}
-.required {
-    color: red;
-}
-.error {
-    color: red;
-}
-aside {
-    border: 1px solid #F2E2BA;
+h1 {
     text-align: center;
 }
 
+h2 {
+    color: white;
+    background-color: #00798C;
+    text-align: center;
+    margin: 30px 5%;
+    padding: 15px 5%;
+    border-radius: 50px;
+}
+
+main {
+    padding-top: 15px;
+    background-color: #cbf5fc;
+    text-align: center;
+}
+
+.main_view_1 img {
+    height: 200px;
+}
+.main_view p {
+    padding: 0 3%;
+    text-align: left;
+}
+.maker {
+    margin: 3%;
+    padding: 3%;
+    border: 5px solid #ccf0da;
+    color: #169134;
+}
+.maker img, .user img {
+    height: 100px;
+}
+.game_maker {
+    height: 200px;
+}
+.user {
+    margin: 3%;
+    padding: 3%;
+    border: 5px solid #f8dbdf;
+    color: #D1495B;
+}
+.user div{
+    padding: 0;
+}
+.user button{
+    padding: 0;
+}
+.user button img{
+    width: 100%;
+}
+
+
+aside {
+    border: 3px solid #F2E2BA;
+    padding: 3%;
+    margin: 3%;
+}
+
+aside p {
+    text-align: center;
+}
+aside img {
+    height: 100px;
+}
+
+
+form {
+    justify-content: center;
+}
+
+tbody img {
+    height: 50px;
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+}

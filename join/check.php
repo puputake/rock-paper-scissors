@@ -2,12 +2,14 @@
 session_start();
 require('../dbconnect.php');
 
-// if (!isset($_SESSION['join'])) {
-//     header('Location: index.php');
-//     exit();
-// }
+if (!isset($_SESSION['join'])) {
+    header('Location: index.php');
+    exit();
+}
 
+// フォームが送信された場合
 if (!empty($_POST)) {
+	// DBに登録
     $statement = $db->prepare('INSERT INTO users SET name=?, email=?, password=?, picture=?, coins=10, created=NOW()');
     $statement -> execute(array(
         $_SESSION['join']['name'],
@@ -36,17 +38,14 @@ if (!empty($_POST)) {
 
 <body class="container">
     <header>
-        <h1>むかしなつかし～じゃんけんゲーム～</h1>
+        <h2>むかしなつかし～じゃんけんゲーム～</h2>
     </header>
     <main>
         <div class="main_view row">
-            <h2>ユーザー登録確認</h2>
+            <h3>ユーザー登録確認</h3>
             <p>記入した内容を確認して、「登録する」ボタンをクリックしてください。</p>
             <form action="" method="post">
                 <input type="hidden" name="action" value="submit" />
-
-                <!-- ↑どういう意味？ないとthanks.phpに飛ばなかった。 -->
-                
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">ユーザー名</label>
                     <p><?php print(htmlspecialchars($_SESSION['join']['name'])); ?></p>
